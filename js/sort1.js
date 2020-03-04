@@ -1,4 +1,5 @@
 window.onload = function() {
+    startTime = Date.now();
     ctx = canv.getContext("2d");
 
     document.addEventListener("keydown", keyPush);
@@ -29,6 +30,8 @@ barHeight = canv.height / maxRange;
                     // is slowed down for testing or placing cells.
 deltaTime = 0;
 lastFrame = 0;
+startTime = 0;
+totalTime = 0;
 
     // This boolean is used when pausing the game logic to place cells.
 pauseGame = false;
@@ -71,8 +74,9 @@ function render() {
         count2 +=1;
 
         sort();
-        if(count2 == max && isSwitch == false) {
+        if(max == 2) {
             pauseGame = true;
+            console.log(Date.now() - startTime);
         }
     }
 
@@ -99,10 +103,6 @@ function render() {
 
 function sort() {
     if(count2 >= max) {
-        if(!isSwitch) {
-            isSwitch = false;
-            return;
-        }
         count2 = 1;
         max -= 1;
     }
@@ -110,7 +110,6 @@ function sort() {
         let temp1 = intArray[count2];
         intArray[count2] = intArray[count2-1];
         intArray[count2-1] = temp1;
-        isSwitch = true;
     }
 }
 

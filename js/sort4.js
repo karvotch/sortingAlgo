@@ -1,4 +1,5 @@
 window.onload = function() {
+    startTime = Date.now();
     ctx = canv.getContext("2d");
 
     document.addEventListener("keydown", keyPush);
@@ -29,25 +30,27 @@ barHeight = canv.height / maxRange;
                     // is slowed down for testing or placing cells.
 deltaTime = 0;
 lastFrame = 0;
+startTime = 0;
+totalTime = 0;
 
     // This boolean is used when pausing the game logic to place cells.
-pauseGame = true;
+pauseGame = false;
 
     // The interval speed for game logic.
     // The variable uses milliseconds to determine game logic 
         // (100 = 100 milliseconds until the next call to game logic).
-gameLogicSpeed = 500;
+gameLogicSpeed = 100;
 
     // How many times the game has been drawn or rendered.
 count = 0;
 count2 = 0;
 
 intArray = [];
-for(var i = 0; i < maxRange; i++) {
+for(let i = 0; i < maxRange; i++) {
     intArray.push(i);
 }
 
-for(var i = 0; i < 200; i++) {
+for(let i = 0; i < 200; i++) {
     let rand1 = getRandomInt(min, maxRange);
     let rand2 = getRandomInt(min, maxRange);
     let temp1 = intArray[rand1];
@@ -74,6 +77,11 @@ function render() {
 
         sort();
 
+        if(finished) {
+            console.log(Date.now() - startTime);
+            pauseGame = true;
+        }
+
         count2 +=1;
     }
 
@@ -90,7 +98,7 @@ function render() {
 
         // Select another color.
     ctx.fillStyle = "black";
-    for(var i = 0; i < 100; i++) {
+    for(let i = 0; i < 100; i++) {
         ctx.fillRect(i * barWidth, canv.height, barWidth, -(intArray[i] * barHeight));
     }
         // Loop the same function we are in.
@@ -121,17 +129,17 @@ function sort() {
                 tempArray.push(new Array());
                 tempArray.push(new Array());
                 let count3 = [0, 0];
-                for(var j = previousMerge[i-1][0]; j <= previousMerge[i-1][1]; j++) {
+                for(let j = previousMerge[i-1][0]; j <= previousMerge[i-1][1]; j++) {
                     tempArray[0].push(intArray[j]);
                 }
-                for(var j = previousMerge[i][0]; j <= previousMerge[i][1]; j++) {
+                for(let j = previousMerge[i][0]; j <= previousMerge[i][1]; j++) {
                     tempArray[1].push(intArray[j]);
                 }
                 let deltaIndex = previousMerge[i-1][0];
                 //console.log(tempArray[0]);
                 //console.log(tempArray[1]);
                 //console.log(intArray);
-                for(var j = previousMerge[i-1][0]; j <= previousMerge[i][1]; j++) {
+                for(let j = previousMerge[i-1][0]; j <= previousMerge[i][1]; j++) {
                     if(count3[0] == tempArray[0].length) {
                         intArray[j] = tempArray[1][count3[1]];
                         count3[1] += 1;
@@ -174,7 +182,7 @@ function sort() {
             }
             previousMerge.push([indexStart,indexStart+1]);
         } else {
-            isFinished = true;
+            finished = true;
         }
     }
 }

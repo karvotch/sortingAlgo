@@ -1,4 +1,5 @@
 window.onload = function() {
+    startTime = Date.now();
     ctx = canv.getContext("2d");
 
     document.addEventListener("keydown", keyPush);
@@ -29,9 +30,11 @@ barHeight = canv.height / maxRange;
                     // is slowed down for testing or placing cells.
 deltaTime = 0;
 lastFrame = 0;
+startTime = 0;
+totalTime = 0;
 
     // This boolean is used when pausing the game logic to place cells.
-pauseGame = true;
+pauseGame = false;
 
     // The interval speed for game logic.
     // The variable uses milliseconds to determine game logic 
@@ -70,6 +73,11 @@ function render() {
         deltaTime = 0;
 
         sort();
+        
+        if(count2 == max-2) {
+            console.log(Date.now() - startTime);
+            pauseGame = true;
+        }
 
         count2 +=1;
     }
