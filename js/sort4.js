@@ -114,7 +114,7 @@ function sort() {
         if(previousMerge.length > 1) {
             //console.log("1: ", previousMerge.length);
             let i = previousMerge.length -1;
-            if(((previousMerge[i-1][1] - previousMerge[i-1][0] + 1) - (previousMerge[i][1] - previousMerge[i][0] + 1)) < 2) {
+            if(((previousMerge[i-1][1] - previousMerge[i-1][0] + 1) == (previousMerge[i][1] - previousMerge[i][0] + 1)) || endOfArray) {
                 //console.log("hello");
                 let mergedArray = [previousMerge[i-1][0], previousMerge[i][1]];
                 let tempArray = [];
@@ -158,15 +158,24 @@ function sort() {
 
         //console.log(previousMerge);
         //console.log(previousMerge.length-1);
-        let length = ((previousMerge[previousMerge.length-1][1]+1) - (previousMerge[previousMerge.length-1][0]));
-        //console.log(length);
-        indexStart = previousMerge[previousMerge.length-1][1]+1;
-        if(intArray[indexStart+1] < intArray[indexStart]) {
-            let temp1 = intArray[indexStart];
-            intArray[indexStart] = intArray[indexStart+1];
-            intArray[indexStart+1] = temp1;
+        if(!endOfArray) {
+            indexStart = previousMerge[previousMerge.length-1][1]+1;
+            if(indexStart == intArray.length-1) {
+                previousMerge.push([indexStart, indexStart]);
+                endOfArray = true;
+                return 0;
+            } else if(indexStart == intArray.length-2) {
+                endOfArray = true;
+            }
+            if(intArray[indexStart+1] < intArray[indexStart]) {
+                let temp1 = intArray[indexStart];
+                intArray[indexStart] = intArray[indexStart+1];
+                intArray[indexStart+1] = temp1;
+            }
+            previousMerge.push([indexStart,indexStart+1]);
+        } else {
+            isFinished = true;
         }
-        previousMerge.push([indexStart,indexStart+1]);
     }
 }
 
